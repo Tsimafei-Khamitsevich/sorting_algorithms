@@ -222,9 +222,35 @@ def quick_sort(array):
         return first_part + pivot + second_part
 
 
+def shell_sort(array, d=5):
+    """
+    Implementation of shell sort algorithm
+
+    Attributes:
+    array : list
+    array to sort
+    d : int
+    d value, step of indexes to pick
+    
+    Returns:
+    array : list
+    New sorted array
+    """
+    array = array.copy()
+    for x in range(d, 0, -1):
+        for i in range(x):
+            index = range(i, len(array), x)
+            sub_arr = [array[k] for k in index]
+            sorted_sub_arr = quick_sort(sub_arr)
+            
+            for j in range(len(sorted_sub_arr)):
+                array[index[j]] = sorted_sub_arr[j]
+    
+    return array
+
 if __name__ == "__main__":
     
-    array = generate_rand_array(num_elem=15)
-    array = []
-    print(simple_sort(array))
+    array = generate_rand_array(n=15)
+    # array = []
+    print(shell_sort(array))
     

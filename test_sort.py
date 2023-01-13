@@ -89,3 +89,15 @@ class TestQuickSort(TestSort, unittest.TestCase):
 
     def func(self, array):
         return main.quick_sort(array)
+
+
+class TestShellSort(TestSort, unittest.TestCase):
+    """
+    shell_sort function test
+    """
+    def func(self, array):
+        return main.shell_sort(array)
+
+
+if __name__ == '__main__':
+    unittest.main()
