@@ -5,6 +5,7 @@ Contains tests for sorting functions
 import unittest
 import main
 
+
 class TestSort():
     """
     Base class with test cases for
@@ -87,7 +88,7 @@ class TestQuickSort(TestSort, unittest.TestCase):
     quick_sort function test
     """
 
-    def func(self, array):
+    def func(self, array, ):
         return main.quick_sort(array)
 
 
@@ -97,6 +98,19 @@ class TestShellSort(TestSort, unittest.TestCase):
     """
     def func(self, array):
         return main.shell_sort(array)
+
+
+class TestRadixSort(TestSort, unittest.TestCase):
+    """
+    radix_sort function test
+    """
+    def func(self, array, **kwargs):
+        return main.radix_sort(array, **kwargs)
+
+    def test_descending_order(self):
+        array = main.generate_rand_array(n=1000, min=-1000, max=1000)        
+        sorted_array = sorted(array, reverse=True)
+        self.assertEqual(self.func(array, ascending=False), sorted_array)
 
 
 if __name__ == '__main__':

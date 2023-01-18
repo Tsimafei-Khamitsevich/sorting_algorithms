@@ -200,26 +200,24 @@ def quick_sort(array):
 
     if len(array) < 2:
         return array
-    else:
-        first_part, second_part, pivot = [], [], []
-        
-        # random pivot index
-        pivot_ind = random.randrange(0, len(array))
-        
-        # separates into less, more, equal
-        # than pivot value
-        for i in array:
-            if i < array[pivot_ind]:
-                first_part.append(i)
-            elif i > array[pivot_ind]:
-                second_part.append(i)
-            else:
-                pivot.append(i)
+   
+    first_part, second_part = [], []
+    
+    # random pivot index
+    pivot_ind = random.randrange(0, len(array))
+    pivot = array.pop(pivot_ind)
+    # separates into less, more, equal
+    # than pivot value
+    for i in array:
+        if i <= pivot:
+            first_part.append(i)
+        elif i > pivot:
+            second_part.append(i)
 
-        first_part = quick_sort(first_part)
-        second_part = quick_sort(second_part)
+    first_part = quick_sort(first_part)
+    second_part = quick_sort(second_part)
 
-        return first_part + pivot + second_part
+    return first_part + [pivot] + second_part
 
 
 def shell_sort(array, d=5):
@@ -248,9 +246,87 @@ def shell_sort(array, d=5):
     
     return array
 
+
+def radix_sort(array, ascending=True):
+    """
+    Implementation of radix sort algorithm
+
+    Attributes:
+    array : list
+    array to sort
+    ascending : bool
+    order of sorting 
+    
+    Returns:
+    array : list
+    New sorted array
+    """
+
+    def sort_positive_num(array, ascending=True):
+        
+        if len(array) < 2:
+            return array
+        
+        divider = 10
+
+        all_digits_through = False
+        while not all_digits_through:
+            
+            all_digits_through = True
+            
+            # determines ascending, descending order
+            digits0_9 = range(10)
+            if not ascending:
+                digits0_9 = range(9, -1,-1)
+
+            d = {i: list() for i in digits0_9}
+
+            for i in array:
+                digit = int((i % divider) / (divider / 10))
+                try:
+                    d[digit].append(i)
+                except KeyError:
+                    print(f'Error causes {i} {digit} {divider}')
+                    raise KeyError()
+
+                if i // divider != 0:
+                    all_digits_through = False
+
+            divider = divider * 10
+            array.clear()
+
+            for _, l in d.items():
+                array.extend(l)
+
+            d.clear()
+            
+        return array
+
+    array = array.copy()
+    
+    neg_num, pos_num = [], []
+    for i in array:
+        if i < 0:
+            neg_num.append(-i)
+        else:
+            pos_num.append(i)
+    
+    # determines ascending, descending order of whole array
+    neg_num = sort_positive_num(neg_num, False if ascending else True)
+    neg_num = [-abs(i) for i in neg_num]
+    pos_num = sort_positive_num(pos_num, True if ascending else False)
+    
+    # determines ascending, descending order of whole array
+    if ascending:
+        sorted_array = neg_num + pos_num
+    else:
+        sorted_array = pos_num + neg_num
+
+    return sorted_array
+
+    
 if __name__ == "__main__":
     
     array = generate_rand_array(n=15)
-    # array = []
-    print(shell_sort(array))
+    print(radix_sort(array, False))
     
